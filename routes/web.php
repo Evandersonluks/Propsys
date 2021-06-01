@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\frontend\UserController;
+use App\Http\Controllers\frontend\ProposalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('main');
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'loginAction'])->name('login-action');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('/registrar', [UserController::class, 'showFormRegister'])->name('register');
+Route::post('/registrar', [UserController::class, 'register'])->name('register-action');
+
+
+Route::middleware('auth')->group(function() {
+    Route::get('/', [ProposalController::class, 'index'])->name('home');
 });
