@@ -4,3 +4,12 @@
     box-sizing: border-box;
     text-decoration: none;
 }
+
+.selected {
+    background-color: #777777;
+    color: #eeeeee !important;
+}
+
+table tr {
+    cursor: pointer;
+}

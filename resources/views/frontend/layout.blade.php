@@ -1,7 +1,7 @@
 @extends('main')
 
 @section('body')
-    {{-- @include('frontend.partials.header') --}}
+    @include('frontend.partials.header')
     
-    {{-- @yield('page-content') --}}
+    @yield('page-content')
 @endsection

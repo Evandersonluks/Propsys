@@ -1883,7 +1883,55 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
   \******************************************/
 /***/ (() => {
 
-alert("deu certo!");
+var line = '';
+$('.installments').on('click', function (e) {
+  var idprops = $(this).data('idprops');
+  $('#inst').modal('show');
+  var el = $('#paydate');
+  el.html('');
+  $.get('/propostas/' + idprops + '/datas-de-pagamento', function (data) {
+    var dt = JSON.parse(data);
+    var pays = JSON.parse(dt.installments_date);
+    $.each(pays, function (k, v) {
+      var date = new Date(v);
+      var day = date.getDate();
+      var mth = date.getMonth() + 1;
+      var year = date.getFullYear();
+      el.append("\n                <p>".concat(day + " / " + mth + " / " + year, "</p>\n            "));
+    });
+  });
+});
+$('td select').on('change', function () {
+  var stts = $(this).val();
+  var idprops = $(this).data('id');
+  var conf = confirm("Deseja realmente mudar o status?");
+
+  if (conf) {
+    $.get('/set-status', {
+      stts: stts,
+      idprops: idprops
+    }, function (data) {
+      if (data) {
+        alert('Status alterado com sucesso!');
+      } else {
+        alert('Não foi possível alterar o status');
+      }
+    });
+  }
+});
+$('.line').on('click', function () {
+  line = $(this).data('line');
+  $('.line').removeClass('selected');
+  $(this).addClass('selected');
+  $('.editp').removeClass('disabled').attr('href', '/proposta/' + line + '/editar');
+});
+$('.client-line').on('click', function () {
+  line = $(this).data('line');
+  $('.client-line').removeClass('selected');
+  $(this).addClass('selected');
+  $('.editc').removeClass('disabled').attr('href', '/cliente/' + line + '/editar');
+  $('.propsc').removeClass('disabled').attr('href', '/cliente/' + line + '/propostas');
+});
 
 /***/ }),
 
