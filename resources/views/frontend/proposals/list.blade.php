@@ -2,12 +2,45 @@
 
 @section('page-content')
 
-<div class="container">
+    <div class="container">
         <h2 class="my-3 p-0">Propostas</h2>
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center my-1">
             <div>
                 <a class="btn btn-success" href="{{ route('props-register') }}">Cadastrar Propostas</a>
             </div>
+
+            <form class="d-flex align-items-center border px-2" action="">
+                <div class="d-flex flex-column mx-2" style="font-size: 0.8rem">
+                    <label for="status">Status</label>
+                    <select name="status" id="status">
+                        <option value="">Todos</option>
+                        @foreach ($filters as $fill)
+                        <option value="{{ $fill->status }}">{{ ($fill->status == 0) ? 'Aberta' : 'Aprovada' }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="d-flex flex-column mx-2" style="font-size: 0.8rem">
+                    <label for="status">Clientes</label>
+                    <select name="client" id="client">
+                        <option value="" selected>Todos</option>
+                        @foreach ($filters as $fill)
+                            <option value="{{ $fill->client_id }}">{{ $clientName($fill->client_id)->company_name }}</option> 
+                        @endforeach
+                    </select>
+                </div>
+                <div class="d-flex flex-column mx-2" style="font-size: 0.8rem">
+                    <label for="status">Periodo</label>
+                    <select name="period" id="client">
+                        <option value="" selected>Todos</option>
+                        <option value="{{ date('Y-m-d H:i:s', strtotime('-24 hour', strtotime(date('Y-m-d H:i:s')))) }}">Último Dia</option>
+                        <option value="{{ date('Y-m-d H:i:s', strtotime('-7 day', strtotime(date('Y-m-d H:i:s')))) }}">Última Semana</option>
+                        <option value="{{ date('Y-m-d H:i:s', strtotime('-1 month', strtotime(date('Y-m-d H:i:s')))) }}">Último Mês</option>
+                    </select>
+                </div>
+
+                <input class="btn btn-secondary px-4" type="submit" value="Filtrar">
+            </form>
+
             <div>
                 <a class="btn btn-primary editp disabled">Editar Proposta</a>
             </div>
@@ -62,6 +95,9 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+        <div class="d-flex justify-content-end">
+            <a class="btn btn-success mt-4" href="{{ route('export') }}">Exportar para Excel</a>
         </div>
     </div>
 

@@ -8,6 +8,21 @@ use Carbon\Carbon;
 
 class ProposalsService
 {
+    public function getProposals($params = null)
+    {
+        return Proposal::select('proposals.*')
+            ->when(isset($params['status']), function ($query) use ($params) {
+                $query->where('status', $params['status']);
+            })
+            ->when(isset($params['client']), function ($query) use ($params) {
+                $query->where('client_id', $params['client']);
+            })
+            ->when(isset($params['period']), function ($query) use ($params) {
+                $query->whereDate('created_at', '<=', Carbon::now())
+                    ->whereDate('created_at', '>=', $params['period']);
+            });
+    }
+
     public function saveProposals($data)
     {
         if(isset($data['id']) && !empty($data['id'])) {

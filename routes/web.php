@@ -39,4 +39,5 @@ Route::middleware('auth')->group(function() {
     Route::get('/propostas/{id}/datas-de-pagamento', [ProposalController::class, 'getPaymentDates']);
     Route::post('/propostas-salvar', [ProposalController::class, 'store'])->name('props-save');
     Route::get('/proposta/{proposal}/editar', [ProposalController::class, 'edit'])->name('props-edit');
+    Route::get('/proposta/exportar', [ProposalController::class, 'exports'])->name('export');
 });

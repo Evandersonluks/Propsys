@@ -5,19 +5,26 @@ namespace App\Http\Controllers\frontend;
 use App\Models\Client;
 use App\Models\Proposal;
 use Illuminate\Http\Request;
+use App\Exports\ProposalsExport;
 use App\Services\ProposalsService;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProposalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $params = $request->all();
+
+        $filters = (new Proposal)->select('client_id', 'status', 'created_at')->get();
+
         $clientName = fn($clid) => (new ProposalsService)->getClientName($clid);
 
-        $props = (new Proposal())->all();
+        $props = (new ProposalsService)->getProposals($params)->get();
 
         return view('frontend.proposals.list')
             ->with('clientName', $clientName)
+            ->with('filters', $filters)
             ->with('proposals', $props);
     }
 
@@ -73,5 +80,10 @@ class ProposalController extends Controller
             ->with('clientName', $clientName)
             ->with('clients', $clients)
             ->with('proposal', $proposal);
+    }
+
+    public function exports()
+    {
+        return Excel::download(new ProposalsExport, 'Propostas.xlsx');
     }
 }
