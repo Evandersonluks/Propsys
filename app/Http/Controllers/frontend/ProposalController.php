@@ -40,12 +40,12 @@ class ProposalController extends Controller
         $validated = $request->validate([
             'client-id' => 'required',
             'work-address' => 'required',
-            'total-value' => 'required',
-            'signal' => 'required',
+            'total-value' => 'required|numeric',
+            'signal' => 'required|numeric',
             'service' => 'required',
-            'installments-number' => 'required',
-            'installments-value' => 'required',
-            'payment-start' => 'required',
+            'installments-number' => 'required|numeric|max:12',
+            'installments-value' => 'required|numeric',
+            'payment-start' => 'required|date|after_or_equal:today',
         ]);
 
         if( !(new ProposalsService)->saveProposals($request->all()) ) {
